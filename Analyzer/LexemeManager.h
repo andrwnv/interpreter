@@ -14,5 +14,5 @@ public:
     void push();
 
 private:
-    std::stack < INode<void*> * > _stack;
+    std::stack < INode<int> * > _stack;
 };
