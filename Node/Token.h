@@ -2,45 +2,21 @@
 
 #include "INode.h"
 
-template <class T>
-class Token : public INode<T>
+class Token : public INode
 {
 public:
-    explicit Token(INode<T>* rightChild, INode<T>* leftChild, std::function<T(T, T)> && operand);
+    Token() = default;
+    Token(std::shared_ptr<INode> rightChild, std::shared_ptr<INode> leftChild, std::function<int(int, int)> && operand);
+    Token(Token const& token);
 
-    std::shared_ptr<INode<T>> getRightChild()  const override;
-    std::shared_ptr<INode<T>> getLeftChild()   const override;
+    [[nodiscard]] std::shared_ptr<INode>       getRightChild()  const override;
+    [[nodiscard]] std::shared_ptr<INode>       getLeftChild()   const override;
 
-    std::function<T(T, T)>    getOperand()     const override;
+    [[nodiscard]] std::function<int(int, int)> getOperand()     const override;
 
 private:
-    std::function<T(T, T)>    _operand;
+    std::function<int (int, int)>    _operand;
 
-    std::weak_ptr<INode<T>>   _leftChild;
-    std::weak_ptr<INode<T>>   _rightChild;
+    std::weak_ptr<INode>           _leftChild;
+    std::weak_ptr<INode>           _rightChild;
 };
-
-
-template<class T>
-Token<T>::Token(INode<T>* rightChild, INode<T>* leftChild, std::function<T(T, T)> && operand)
-    : _rightChild(std::make_shared<INode<T>>(rightChild))
-    , _leftChild (std::make_shared<INode<T>>(leftChild))
-    , _operand   (std::move(operand)) { }
-
-template<class T>
-std::shared_ptr<INode<T>> Token<T>::getRightChild() const
-{
-    return _rightChild.lock();
-}
-
-template<class T>
-std::shared_ptr<INode<T>> Token<T>::getLeftChild() const
-{
-    return _leftChild.lock();
-}
-
-template<class T>
-std::function<T(T, T)> Token<T>::getOperand() const
-{
-    return _operand;
-}
