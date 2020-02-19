@@ -1,11 +1,10 @@
 #pragma once
 
-#include <stack>
+#include <list>
 #include <iostream>
 #include <functional>
 
-template<class T>
-class INode;
+#include "Node/Token.h"
 
 class LexemeManager
 {
@@ -14,5 +13,5 @@ public:
     void push();
 
 private:
-    std::stack < INode<int> * > _stack;
+    std::list<INode*> _lexemesTree;
 };
