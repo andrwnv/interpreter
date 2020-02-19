@@ -19,6 +19,9 @@ add_executable(${PROJECT_NAME} main.cpp ${HEADERS_INCLUDE} ${SOURCES_INCLUDE}
 
         Analyzer/LexemeManager.h
         Analyzer/LexemeManager.cpp
+
+        Assembler.cpp
+        Assembler.h
 )
 
 #target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic -Werror)
