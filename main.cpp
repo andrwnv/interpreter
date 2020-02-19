@@ -10,6 +10,6 @@
 int main()
 {
     auto test = new LexemeManager();
-
+    test->push();
     return 0;
 }
