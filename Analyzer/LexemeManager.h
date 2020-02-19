@@ -13,5 +13,5 @@ public:
     void push();
 
 private:
-    std::list<INode*> _lexemesTree;
+    std::list<INode<int>*> _lexemesTree;
 };
