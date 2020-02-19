@@ -14,7 +14,11 @@ include_directories(src)
 set (PROJECT_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(${PROJECT_NAME} main.cpp ${HEADERS_INCLUDE} ${SOURCES_INCLUDE}
-        # src/...
+        Node/Token.h
+        Node/INode.h
+
+        Analyzer/LexemeManager.h
+        Analyzer/LexemeManager.cpp
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic -Werror)
