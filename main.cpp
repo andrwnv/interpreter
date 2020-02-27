@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "Analyzer/LexemeManager.h"
+#include "LexemeManager.h"
 
 /*
     Exemple: z = 7y –4x +7
