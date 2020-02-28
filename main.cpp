@@ -4,6 +4,8 @@
     Exemple: z = 7y –4x +7
 */
 
+// Final lexeme will look like this: ADD a 12i, where i - integer
+
 class Operation
 {
 public:
@@ -70,10 +72,44 @@ private:
     Operand _operand;
 };
 
+template <class T, class U>
+class Lexeme
+{
+public:
+    explicit Lexeme(Operation operation) : _operation(operation)
+    { }
+
+private:
+    Operation _operation;
+    T _fisrt;
+    U _secound;
+
+private:
+    [[nodiscard]] auto _firstType() const -> std::string
+    {
+        return typeid(_fisrt).name();
+    }
+
+    [[nodiscard]] auto _secondType() const -> std::string
+    {
+        return typeid(_secound).name();
+    }
+
+public:
+    [[nodiscard]] auto finishType() const -> std::string
+    {
+        return typeid(decltype(_fisrt + _secound)).name();
+    }
+};
+
 int main()
 {
     Operation op('+');
 
     std::cout << op.operation("a", 12);
+
+    Lexeme<float, float> a(op);
+    std::cout << a.finishType();
+
     return 0;
 }
