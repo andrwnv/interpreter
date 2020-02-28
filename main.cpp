@@ -7,31 +7,42 @@
 class Operation
 {
 public:
-    Operation() = default;
+    Operation(char operand) { _convert(operand); }
+
+private:
+    enum class Operand
+    {
+        equal,
+        mult,
+        sum,
+        div,
+        sub,
+        undefinded
+    };
 
 public:
-    [[nodiscard]]
-    std::string operation(std::string const& var) const
+    template <class T> [[nodiscard]]
+    std::string operation(std::string const& var, T const& value) const
     {
         switch (_operand)
         {
             case Operand::equal:
-                return "MOV " + var;
+                return "MOV " + var + " " + std::to_string(value);
             case Operand::mult:
-                return "MLT " + var;
+                return "MLT " + var + " " + std::to_string(value);
             case Operand::sum:
-                return "SUM " + var;
+                return "SUM " + var + " " + std::to_string(value);
             case Operand::div:
-                return "DIV " + var;
+                return "DIV " + var + " " + std::to_string(value);
             case Operand::sub:
-                return "SUB " + var;
+                return "SUB " + var + " " + std::to_string(value);
             default:
                 return "";
         }
     }
 
-    [[nodiscard]]
-    bool convert(char operand)
+private:
+    bool _convert(char operand)
     {
         switch (operand)
         {
@@ -56,21 +67,13 @@ public:
     }
 
 private:
-    enum class Operand
-    {
-        equal,
-        mult,
-        sum,
-        div,
-        sub,
-        undefinded
-    };
-
     Operand _operand;
 };
 
 int main()
 {
+    Operation op('+');
 
+    std::cout << op.operation("a", 12);
     return 0;
 }
