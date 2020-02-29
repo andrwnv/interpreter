@@ -13,7 +13,13 @@ include_directories(src)
 
 set (PROJECT_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable(${PROJECT_NAME} main.cpp ${HEADERS_INCLUDE} ${SOURCES_INCLUDE}
+add_executable(
+    ${PROJECT_NAME}
+    main.cpp
+    Parser.cpp
+    Parser.h
+    ${HEADERS_INCLUDE}
+    ${SOURCES_INCLUDE}
     # ...
 )
 
