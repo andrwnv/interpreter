@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include "Parser.h"
 /*
     Exemple: z = 7y –4x +7
 */
@@ -110,6 +110,11 @@ int main()
 
     Lexeme<float, float> a(op);
     std::cout << a.finishType();
+	
+	Parser pars("a=3+(2+2);");
+	std::cout << std::endl;
+	pars.parse();
 
+	
     return 0;
 }

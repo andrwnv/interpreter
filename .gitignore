@@ -103,3 +103,5 @@ dkms.conf
 cmake-build-debug/
 
 .idea
+.vs
+out
