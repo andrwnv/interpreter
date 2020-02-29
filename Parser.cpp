@@ -18,20 +18,18 @@ void Parser::parse()
 			if (element == operands[i])
 			{
 				std::string tempstr;
-				pos[1] = str.find(element,pos[0]);
-				std::cout << std::endl << "pos 0 = " << pos[0] << " pos 1 = " << pos[1] << std::endl;
+				pos[1] = str.find(element, pos[0]);
+
 				int var = pos[0];
 				if (pos[0] != pos[1]) {
-					do
-					{
+					do {
 						tempstr += str[var];
-						std::cout << std::endl << "                  ZASHEL        " << std::endl;
 						var++;
 					} while (var < pos[1]);
 				}
 				if (!tempstr.empty())
 					varsAndOps.push(tempstr);
-				
+
 				tempstr = element;
 				if (!tempstr.empty())
 					varsAndOps.push(tempstr);
@@ -49,4 +47,5 @@ void Parser::parse()
 	}
 	//"a=3+(2+2);"
 }
+
 

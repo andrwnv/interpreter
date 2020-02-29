@@ -9,6 +9,7 @@ public:
 
     Parser(std::string str);
 	void parse();
+	std::stack<std::string> getStack() { return varsAndOps; }
 private:
 	std::string str;
 	const static int operandsSize = 8;
