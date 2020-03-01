@@ -1,4 +1,7 @@
 #include <iostream>
+#include <array>
+#include <algorithm>
+
 #include "Parser.h"
 /*
     Exemple: z = 7y –4x +7
@@ -80,9 +83,10 @@ public:
     { }
 
 private:
+    T         _fisrt;
+    U         _secound;
+
     Operation _operation;
-    T _fisrt;
-    U _secound;
 
 private:
     [[nodiscard]] auto _firstType() const -> std::string
@@ -111,10 +115,14 @@ int main()
     Lexeme<float, float> a(op);
     std::cout << a.finishType();
 	
-	Parser pars("a=3+(2+2);");
-	std::cout << std::endl;
-	pars.parse();
+    // Parsing.
+    Parser pars("z=7*y-3*(x+7)");
+    std::cout << std::endl;
 
+    std::cout << std::endl << "Stack: " << std::endl;
+
+    for (auto const& i : pars.getStack())
+        std::cout << "  -> " << i << std::endl;
 	
     return 0;
 }

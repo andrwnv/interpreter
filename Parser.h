@@ -1,20 +1,26 @@
 #pragma once
-#include <string>
+
 #include <algorithm>
 #include <iostream>
-#include <stack>
+#include <string>
+#include <array>
+#include <list>
+
 class Parser
 {
 public:
 
-    Parser(std::string str);
-	void parse();
-	std::stack<std::string> getStack() { return varsAndOps; }
-private:
-	std::string str;
-	const static int operandsSize = 8;
-    
-    char operands[operandsSize] = {'+','-','=','(',')','*','/',';'};
+    Parser(std::string const& str);
 
-	std::stack<std::string> varsAndOps;
+    void setNewString(std::string const& str);
+    std::list<std::string> getStack();
+
+private:
+    void _parse();
+
+private:
+    std::string            _str;
+    std::array<char, 8>    _operands {'+','-','=','(',')','*','/',';'};
+
+    std::list<std::string> _varsAndOps;
 };

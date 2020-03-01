@@ -1,51 +1,48 @@
 #include "Parser.h"
 
-Parser::Parser(std::string str)
+Parser::Parser(std::string const& str) { setNewString(str); }
+
+void Parser::setNewString(const std::string &str)
 {
-	str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
-	this->str = str;
+    _str = str;
+    _str.erase(std::remove(_str.begin(), _str.end(), ' '), _str.end());
+
+    _parse();
 }
 
-void Parser::parse()
+void Parser::_parse()
 {
 	int pos[2] = { 0,0 };
 
-	for (auto element : str)
+    for (auto element : _str)
 	{
-
-		for (int i = 0; i < operandsSize; i++)
+        for (size_t i = 0; i < _operands.size(); ++i)
 		{
-			if (element == operands[i])
+            if (element == _operands.at(i))
 			{
 				std::string tempstr;
-				pos[1] = str.find(element, pos[0]);
+                pos[1] = _str.find(element, pos[0]);
 
 				int var = pos[0];
 				if (pos[0] != pos[1]) {
 					do {
-						tempstr += str[var];
+                        tempstr += _str[var];
 						var++;
 					} while (var < pos[1]);
 				}
 				if (!tempstr.empty())
-					varsAndOps.push(tempstr);
+                    _varsAndOps.push_front(tempstr);
 
 				tempstr = element;
 				if (!tempstr.empty())
-					varsAndOps.push(tempstr);
+                    _varsAndOps.push_front(tempstr);
 				pos[0] = pos[1] + 1;
 			}
 		}
 
 	}
-	std::cout << std::endl << "Stack " << std::endl;
-	while (!varsAndOps.empty())
-	{
-		std::cout << varsAndOps.top();
-		varsAndOps.pop();
-		std::cout << std::endl;
-	}
-	//"a=3+(2+2);"
 }
+
+std::list<std::string> Parser::getStack() { return _varsAndOps; }
 
 
