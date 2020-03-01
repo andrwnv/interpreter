@@ -16,10 +16,13 @@ set (PROJECT_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 add_executable(
     ${PROJECT_NAME}
     main.cpp
+
     Parser.cpp
     Parser.h
-    ${HEADERS_INCLUDE}
-    ${SOURCES_INCLUDE}
+
+    Lexeme.h
+    Operation.h
+
     # ...
 )
 
