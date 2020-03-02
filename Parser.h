@@ -13,7 +13,7 @@ public:
     Parser(std::string const& str);
 
     void setNewString(std::string const& str);
-    std::list<std::string> getStack();
+    [[nodiscard]] std::list<std::string> getStack();
 
 private:
     void _parse();

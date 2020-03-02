@@ -2,6 +2,7 @@
 
 #include <string>
 #include <stdexcept>
+#include <unordered_map>
 
 class Operation
 {
@@ -9,61 +10,51 @@ public:
     Operation(char operand) { _convert(operand); }
 
 private:
-    enum class Operand
-    {
+    enum class Operator {
         equal,
         mult,
         sum,
         div,
         sub,
-        undefinded
+        undefinded = 0
     };
 
-    Operand _operand;
+    Operator _operand;
+
+    const std::unordered_map<char, Operator> _operators
+    {
+        {'=', Operator::equal},
+        {'*', Operator::mult },
+        {'+', Operator::sum  },
+        {'-', Operator::sub  },
+        {'/', Operator::div  },
+    };
 
 public:
-    template <class T> [[nodiscard]]
-    std::string operation(std::string const& var, T const& value) const
-    {
+    [[nodiscard]]
+    std::string operation(std::string const& var, std::string const& value) const {
         switch (_operand)
         {
-            case Operand::equal:
-                return "MOV " + var + " " + std::to_string(value);
-            case Operand::mult:
-                return "MLT " + var + " " + std::to_string(value);
-            case Operand::sum:
-                return "SUM " + var + " " + std::to_string(value);
-            case Operand::div:
-                return "DIV " + var + " " + std::to_string(value);
-            case Operand::sub:
-                return "SUB " + var + " " + std::to_string(value);
+            case Operator::equal:
+                return "MOV " + var + " " + value;
+            case Operator::mult:
+                return "MLT " + var + " " + value;
+            case Operator::sum:
+                return "SUM " + var + " " + value;
+            case Operator::div:
+                return "DIV " + var + " " + value;
+            case Operator::sub:
+                return "SUB " + var + " " + value;
             default:
                 return "";
         }
     }
 
 private:
-    bool _convert(char operand)
-    {
-        switch (operand)
-        {
-            case '=':
-                _operand = Operand::equal;
-                return true;
-            case '*':
-                _operand = Operand::mult;
-                return true;
-            case '+':
-                _operand = Operand::sum;
-                return true;
-            case '/':
-                _operand = Operand::div;
-                return true;
-            case '-':
-                _operand = Operand::sub;
-                return true;
-            default:
-                throw std::logic_error("invalid operator");
-        }
+    bool _convert(char operand) {
+        auto res =  _operators.find(operand);
+        _operand = res->second;
+
+        return res != _operators.end();
     }
 };

@@ -4,35 +4,27 @@
 
 #include "Operation.h"
 
-
-template <class T, class U>
 class Lexeme
 {
 public:
-    explicit Lexeme(Operation const& operation) : _operation(operation) { }
+    explicit Lexeme(Operation const& operation, std::string const& first, std::string const& second)
+        : _firstOperand(first)
+        , _secondOperand(second)
+        , _operation(operation) { }
+
     explicit Lexeme(Operation && operation) : _operation( std::move(operation) ) { }
 
 private:
-    T         _fisrt;
-    U         _secound;
+    std::string _firstOperand;
+    std::string _secondOperand;
 
     Operation _operation;
 
-private:
-    [[nodiscard]] auto _firstType() const -> std::string
-    {
-        return typeid(_fisrt).name();
-    }
-
-    [[nodiscard]] auto _secondType() const -> std::string
-    {
-        return typeid(_secound).name();
-    }
-
 public:
-    [[nodiscard]] auto finishType() const -> std::string
+
+    [[nodiscard]] std::string command() const
     {
-        return typeid(decltype(_fisrt + _secound)).name();
+        return _operation.operation(_firstOperand, _secondOperand);
     }
 };
 
