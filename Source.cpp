@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include  <list>
 using namespace std;
 
 class Tree
@@ -32,11 +33,11 @@ public:
 		head->operation = OperationType::Equal;
 		head->right = new Node;
 		Node* curNode = head->right;
-		
+
 		curNode->dataRight = "7";
 		curNode->operation = OperationType::Summ;
 		curNode->left = new Node;
-		
+
 		curNode = curNode->left;
 		curNode->left = new Node;
 		curNode->operation = OperationType::Subst;
@@ -47,7 +48,7 @@ public:
 		curNode->dataLeft = "7";
 		curNode->operation = OperationType::Multiply;
 		curNode->right = new Node;
-		
+
 		curNode = curNode->right;
 		curNode->dataLeft = "y";
 		curNode->operation = OperationType::Multiply;
@@ -62,11 +63,17 @@ public:
 		curNode->operation = OperationType::Multiply;
 		curNode->dataRight = "x";
 	}
-	void startTranslate()
+	//void startTranslate()
+	//{
+	//	n = 0;
+	//	translate(head);
+	//}
+	void startTranslateUpr()
 	{
 		n = 0;
-		translate(head);
+		translateUpr(head);
 	}
+	list<string> coms;
 private:
 	int n = 0;
 	bool isConstant(string c)
@@ -79,67 +86,87 @@ private:
 		if (isConstant(c)) return ("= " + c);
 		else return c;
 	}
-	
-	string translate(Node* currentNode)
+
+
+	string translateUpr(Node* currentNode)
 	{
 		string p1, p2, returnValue;
 		bool p1IsTemporary = false, p2IsTemporary = false;
 		if (currentNode->right == nullptr)
 		{
-			cout << "LOAD " << generateLoadOutput(currentNode->dataRight) << endl;
+
+			coms.push_back("LOAD " + generateLoadOutput(currentNode->dataRight));
+
 			if (currentNode->operation != OperationType::Equal)
 			{
 				n++;
 				p1 = '$' + to_string(n);
-				cout << "STORE " << p1 << endl;
+				coms.push_back("STORE " + p1);
 			}
 		}
 		else
 		{
-			p2 = translate(currentNode->right);
+			p2 = translateUpr(currentNode->right);
 			p2IsTemporary = true;
-			
+
 		}
 
 		if (currentNode->left == nullptr)
 		{
 			if (currentNode->operation != OperationType::Equal)
 			{
-				cout << "LOAD " << generateLoadOutput(currentNode->dataLeft) << endl;
+				coms.push_back("LOAD " + generateLoadOutput(currentNode->dataLeft));
 			}
 
 		}
 		else
 		{
-			p1 = translate(currentNode->left);
+			p1 = translateUpr(currentNode->left);
 			p1IsTemporary = true;
-			
+
 		}
 
 		switch (currentNode->operation)
 		{
 		case OperationType::Summ:
-			if (p2.empty())p2 = "$2";
-			if (p2IsTemporary || p1IsTemporary) cout << "LOAD " << p2 << endl;
-			cout << "ADD $" << n - 1 << endl;
-			cout << "STORE $" << n - 1 << endl;
+
+			if (p2IsTemporary || p1IsTemporary)
+			{
+				coms.push_back("LOAD " + p1);
+			}
+
+			coms.push_back("ADD $" + to_string(n - 1));
+			coms.push_back("STORE $" + to_string(n - 1));
+
 			returnValue = "$" + to_string(n - 1);
 			break;
+
 		case OperationType::Multiply:
-			if ( p1IsTemporary) cout << "LOAD " << p1 << endl;
-			cout << "MPY $" << n << endl;
-			cout << "STORE $" << n << endl;
+
+			if (p1IsTemporary) {
+				coms.push_back("LOAD " + p1);
+			}
+
+			coms.push_back("MPY $" + to_string(n));
+			coms.push_back("STORE $" + to_string(n));
+
 			returnValue = "$" + to_string(n);
 			break;
 		case OperationType::Subst:
-			if (p2IsTemporary || p1IsTemporary) cout << "LOAD " << p1 << endl;
-			cout << "DIFF $" << n - 1 << endl;
-			cout << "STORE $" << n - 1 << endl;
+
+			if (p2IsTemporary || p1IsTemporary) {
+				coms.push_back("LOAD " + p1);
+			}
+
+			coms.push_back("DIFF $" + to_string(n - 1));
+			coms.push_back("STORE $" + to_string(n - 1));
 			returnValue = "$" + to_string(n);
 			break;
 		case OperationType::Equal:
-			if (p2IsTemporary) cout << "LOAD " << p2 << endl;
-			cout << "STORE " << currentNode->dataLeft << endl;
+			if (p2IsTemporary) {
+				coms.push_back("LOAD " + p2);
+			}
+			coms.push_back("STORE " + currentNode->dataLeft);
 			break;
 		}
 		if (p1IsTemporary) n--;
@@ -147,13 +174,39 @@ private:
 	}
 };
 
-
-
 int main()
 {
 	Tree* tree = new Tree;
 	setlocale(0, "");
-	tree->startTranslate();
-	//userControl(tree);
+	tree->startTranslateUpr();
+	int count = 0;
+	for (auto const& element : tree->coms)
+	{
+		cout << element << endl;
+	}
+	cout << endl;
+	auto prevItem = tree->coms.begin();
+	for (auto i = tree->coms.begin(); i != tree->coms.end(); ++i)
+	{
+		if (prevItem->find("STORE") == std::string::npos)
+		{
+			prevItem = i;
+			continue;
+		}
+
+		if (i->back() == prevItem->back() && i->find("LOAD") != std::string::npos)
+		{
+			auto tmp = ++i;
+			tree->coms.erase(prevItem, tmp);
+		}
+
+		prevItem = i;
+	}
+
+	for (auto const& element : tree->coms)
+	{
+		cout << element << endl;
+	}
+
 	return 0;
 }
